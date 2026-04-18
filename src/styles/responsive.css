@@ -1,0 +1,223 @@
+/* Responsive Design for EVARIS Website */
+
+/* Mobile First Approach */
+
+/* Header Navigation */
+@media (min-width: 768px) {
+  .desktop-nav {
+    display: flex !important;
+  }
+  
+  .mobile-menu-toggle {
+    display: none !important;
+  }
+  
+  .mobile-menu {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .desktop-nav {
+    display: none !important;
+  }
+  
+  .mobile-menu-toggle {
+    display: block !important;
+  }
+  
+  .mobile-menu {
+    display: block !important;
+  }
+}
+
+/* Hero Section */
+@media (min-width: 768px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .hero-content {
+    order: 1 !important;
+    text-align: left !important;
+  }
+  
+  .hero-image {
+    order: 2 !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  
+  .hero-content {
+    order: 2 !important;
+    text-align: center !important;
+  }
+  
+  .hero-image {
+    order: 1 !important;
+  }
+}
+
+/* Trust Indicators */
+@media (min-width: 768px) {
+  .trust-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 40px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .trust-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .trust-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* Product Cards */
+@media (max-width: 480px) {
+  .product-card {
+    padding: 20px !important;
+  }
+  
+  .product-title {
+    font-size: 18px !important;
+  }
+  
+  .product-description {
+    font-size: 13px !important;
+  }
+  
+  .product-price {
+    font-size: 24px !important;
+  }
+}
+
+/* Footer */
+@media (min-width: 768px) {
+  .footer-brand {
+    justify-content: flex-start !important;
+  }
+  
+  .footer-section {
+    text-align: left !important;
+  }
+  
+  .social-links {
+    justify-content: flex-start !important;
+  }
+  
+  .newsletter-form {
+    flex-direction: row !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .footer-grid {
+    grid-template-columns: 1fr !important;
+    gap: 30px !important;
+  }
+  
+  .footer-section {
+    text-align: center !important;
+  }
+  
+  .social-links {
+    justify-content: center !important;
+  }
+  
+  .footer-brand {
+    justify-content: center !important;
+  }
+}
+
+/* General Responsive Adjustments */
+@media (max-width: 767px) {
+  .section-padding {
+    padding: 60px 20px !important;
+  }
+  
+  .container {
+    padding: 0 15px !important;
+  }
+  
+  .btn {
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+  
+  .heading-large {
+    font-size: clamp(28px, 6vw, 42px) !important;
+  }
+  
+  .heading-medium {
+    font-size: clamp(24px, 5vw, 32px) !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .section-padding {
+    padding: 40px 15px !important;
+  }
+  
+  .heading-large {
+    font-size: clamp(24px, 5vw, 32px) !important;
+  }
+  
+  .text-body {
+    font-size: 14px !important;
+  }
+}
+
+/* Touch-friendly targets for mobile */
+@media (max-width: 767px) {
+  button, a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  .cart-badge {
+    width: 20px !important;
+    height: 20px !important;
+    font-size: 10px !important;
+  }
+}
+
+/* Improve readability on mobile */
+@media (max-width: 767px) {
+  body {
+    font-size: 16px;
+    line-height: 1.5;
+  }
+  
+  .text-small {
+    font-size: 14px;
+  }
+  
+  .text-tiny {
+    font-size: 12px;
+  }
+}
+
+/* Horizontal scroll prevention */
+@media (max-width: 767px) {
+  .prevent-overflow {
+    overflow-x: hidden;
+  }
+  
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

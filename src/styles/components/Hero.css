@@ -1,0 +1,249 @@
+/* Hero Component Styles */
+.hero {
+  position: relative;
+  background: linear-gradient(135deg, rgba(244, 208, 63, 0.1) 0%, rgba(139, 105, 20, 0.1) 100%);
+  padding: 80px 20px;
+  overflow: hidden;
+}
+
+.hero-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+/* Left Content */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.hero-badge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8B6914;
+}
+
+.hero-badge-icon {
+  width: 20px;
+  height: 20px;
+  color: #8B6914;
+}
+
+.hero-badge-text {
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hero-title {
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 700;
+  color: #1F2937;
+  line-height: 1.2;
+  font-family: Georgia, serif;
+}
+
+.hero-title-highlight {
+  display: block;
+  color: #8B6914;
+}
+
+.hero-description {
+  font-size: clamp(16px, 2.5vw, 20px);
+  color: #6B7280;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* Hero Buttons */
+.hero-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-button-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background-color: #8B6914;
+  color: white;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+
+.hero-button-primary:hover {
+  background-color: #6B5612;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(139, 105, 20, 0.3);
+}
+
+.hero-button-secondary {
+  background-color: transparent;
+  color: #8B6914;
+  padding: 16px 32px;
+  border: 2px solid #8B6914;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.hero-button-secondary:hover {
+  background-color: #8B6914;
+  color: white;
+}
+
+/* Trust Indicators */
+.trust-indicators {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  padding-top: 32px;
+}
+
+.trust-item {
+  text-align: center;
+}
+
+.trust-number {
+  font-size: 24px;
+  font-weight: 700;
+  color: #8B6914;
+  margin-bottom: 4px;
+}
+
+.trust-label {
+  font-size: 14px;
+  color: #6B7280;
+}
+
+/* Right Content - Product Showcase */
+.hero-showcase {
+  position: relative;
+}
+
+.hero-showcase-content {
+  position: relative;
+  z-index: 10;
+}
+
+.hero-showcase-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+  padding: 32px;
+}
+
+.hero-product-display {
+  aspect-ratio: 1;
+  background: linear-gradient(135deg, rgba(244, 208, 63, 0.1) 0%, rgba(139, 105, 20, 0.1) 100%);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-product-content {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-product-logo {
+  height: 80px;
+  width: auto;
+  margin: 0 auto;
+}
+
+.hero-product-text {
+  font-size: 14px;
+  color: #6B7280;
+}
+
+/* Decorative Elements */
+.hero-decoration-1 {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+  width: 96px;
+  height: 96px;
+  background-color: rgba(244, 208, 63, 0.2);
+  border-radius: 50%;
+  filter: blur(24px);
+}
+
+.hero-decoration-2 {
+  position: absolute;
+  bottom: -16px;
+  left: -16px;
+  width: 128px;
+  height: 128px;
+  background-color: rgba(139, 105, 20, 0.2);
+  border-radius: 50%;
+  filter: blur(24px);
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+  .hero {
+    padding: 120px 20px;
+  }
+  
+  .hero-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .hero-buttons {
+    flex-direction: row;
+    gap: 16px;
+  }
+  
+  .hero-button-primary,
+  .hero-button-secondary {
+    flex: 1;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding: 60px 20px;
+  }
+  
+  .hero-grid {
+    gap: 40px;
+  }
+  
+  .hero-content {
+    gap: 24px;
+  }
+  
+  .trust-indicators {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .hero-showcase-card {
+    padding: 24px;
+  }
+}

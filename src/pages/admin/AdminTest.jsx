@@ -1,6 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { Package, Users, ShoppingCart, TrendingUp, Plus, Edit, Trash2, LogOut, Eye, Check } from 'lucide-react';
 
 const AdminTest = () => {
   const testResults = [

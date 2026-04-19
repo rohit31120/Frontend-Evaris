@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Package, Users, ShoppingCart, TrendingUp, Plus, Edit, Trash2, LogOut, Eye, Check } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { productsAPI } from '../../services/api';
 import { products as staticProducts } from '../../data/products';
 import p1 from '../../assets/images/products/p-1.jpeg';

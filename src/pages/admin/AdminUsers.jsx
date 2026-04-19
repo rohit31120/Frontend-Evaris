@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Users, ArrowLeft, Search, Filter, Mail, Phone, Calendar, Shield, User } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { usersAPI } from '../../services/api';
 import '../../styles/pages/AdminUsers.css';
 
 const AdminUsers = () => {
-  const navigate = useNavigate();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

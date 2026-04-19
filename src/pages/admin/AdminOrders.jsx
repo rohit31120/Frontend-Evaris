@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, ArrowLeft, Search, Filter, Eye, Package, Truck, CheckCircle, XCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { ordersAPI } from '../../services/api';
 import '../../styles/pages/AdminOrders.css';
 
 const AdminOrders = () => {
-  const navigate = useNavigate();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

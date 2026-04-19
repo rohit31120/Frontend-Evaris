@@ -19,7 +19,11 @@ import WishlistPage from './pages/WishlistPage';
 import SettingsPage from './pages/SettingsPage';
 import AdminRoute from './components/AdminRoute';
 import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminProducts from './pages/admin/AdminProducts';
+import AdminOrders from './pages/admin/AdminOrders';
+import AdminUsers from './pages/admin/AdminUsers';
 import ProductUpload from './pages/admin/ProductUpload';
+import AdminTest from './pages/admin/AdminTest';
 
 function App() {
   return (
@@ -55,7 +59,7 @@ function App() {
             } />
             <Route path="/admin/products" element={
               <AdminRoute>
-                <AdminDashboard />
+                <AdminProducts />
               </AdminRoute>
             } />
             <Route path="/admin/products/add" element={
@@ -65,12 +69,17 @@ function App() {
             } />
             <Route path="/admin/orders" element={
               <AdminRoute>
-                <AdminDashboard />
+                <AdminOrders />
               </AdminRoute>
             } />
             <Route path="/admin/users" element={
               <AdminRoute>
-                <AdminDashboard />
+                <AdminUsers />
+              </AdminRoute>
+            } />
+            <Route path="/admin/test" element={
+              <AdminRoute>
+                <AdminTest />
               </AdminRoute>
             } />
           </Routes>

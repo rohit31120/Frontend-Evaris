@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Upload, X, Plus, Trash2, Save } from 'lucide-react';
+import { productsAPI } from '../../services/api';
 import '../../styles/pages/ProductUpload.css';
 
 const ProductUpload = () => {
@@ -180,41 +181,45 @@ const ProductUpload = () => {
     
     try {
       // Create FormData for file upload
-      const productData = new FormData();
+      const formDataToSend = new FormData();
       
       // Add product details
-      productData.append('name', formData.name);
-      productData.append('category', formData.category);
-      productData.append('price', formData.price);
-      productData.append('originalPrice', formData.originalPrice || formData.price);
-      productData.append('description', formData.description);
-      productData.append('ingredients', formData.ingredients);
-      productData.append('volume', formData.volume);
-      productData.append('badge', formData.badge);
-      productData.append('color', formData.color);
-      productData.append('stock', formData.stock);
-      productData.append('keyIngredients', JSON.stringify(
+      formDataToSend.append('name', formData.name);
+      formDataToSend.append('category', formData.category);
+      formDataToSend.append('price', formData.price);
+      formDataToSend.append('originalPrice', formData.originalPrice || formData.price);
+      formDataToSend.append('description', formData.description);
+      formDataToSend.append('ingredients', formData.ingredients);
+      formDataToSend.append('volume', formData.volume);
+      formDataToSend.append('badge', formData.badge);
+      formDataToSend.append('color', formData.color);
+      formDataToSend.append('stock', formData.stock);
+      formDataToSend.append('keyIngredients', JSON.stringify(
         formData.keyIngredients.filter(ing => ing.name.trim() && ing.benefit.trim())
       ));
-      productData.append('benefits', JSON.stringify(
+      formDataToSend.append('benefits', JSON.stringify(
         formData.benefits.filter(b => b.trim())
       ));
       
       // Add images
       imageFiles.forEach((file, index) => {
-        productData.append(`images`, file);
+        formDataToSend.append(`images`, file);
       });
       
-      // Mock API call - replace with actual API
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Call the actual API with FormData
+      const response = await productsAPI.create(formDataToSend);
       
-      // Success
-      alert('Product uploaded successfully!');
-      navigate('/admin/products');
+      if (response.success) {
+        // Success
+        alert('Product uploaded successfully! It will now be available for users to buy.');
+        navigate('/admin');
+      } else {
+        throw new Error(response.message || 'Failed to upload product');
+      }
       
     } catch (error) {
       console.error('Error uploading product:', error);
-      setErrors({ submit: 'Failed to upload product. Please try again.' });
+      setErrors({ submit: error.message || 'Failed to upload product. Please try again.' });
     } finally {
       setLoading(false);
     }

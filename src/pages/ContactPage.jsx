@@ -1,10 +1,58 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { Mail, Phone, MapPin, Clock, MessageCircle } from 'lucide-react';
+import { contactAPI } from '../services/api';
 import '../styles/pages/ContactPage.css';
 
 const ContactPage = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    subject: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(null); // 'success' | 'error' | null
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitStatus(null);
+
+    try {
+      const response = await contactAPI.submit(formData);
+      
+      if (response.success) {
+        setSubmitStatus('success');
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          subject: '',
+          message: ''
+        });
+      } else {
+        setSubmitStatus('error');
+      }
+    } catch (error) {
+      console.error('Contact form submission error:', error);
+      setSubmitStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#FAFAFA' }}>
       <Header />
@@ -46,11 +94,42 @@ const ContactPage = () => {
               <p style={{ fontSize: '16px', color: '#6B7280', marginBottom: '32px', lineHeight: '1.6' }}>
                 Fill out the form below and we'll get back to you as soon as possible.
               </p>
-              <form style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+              
+              {/* Submission Status Messages */}
+              {submitStatus === 'success' && (
+                <div style={{
+                  backgroundColor: '#D1FAE5',
+                  color: '#065F46',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  marginBottom: '24px',
+                  border: '1px solid #A7F3D0'
+                }}>
+                  <strong>Success!</strong> Your message has been submitted successfully. We'll get back to you soon!
+                </div>
+              )}
+              
+              {submitStatus === 'error' && (
+                <div style={{
+                  backgroundColor: '#FEE2E2',
+                  color: '#991B1B',
+                  padding: '16px',
+                  borderRadius: '8px',
+                  marginBottom: '24px',
+                  border: '1px solid #FECACA'
+                }}>
+                  <strong>Error!</strong> Failed to submit your message. Please try again later.
+                </div>
+              )}
+              
+              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Full Name *</label>
                   <input
                     type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
                     placeholder="Enter your full name"
                     required
                     style={{
@@ -69,6 +148,9 @@ const ContactPage = () => {
                   <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Email Address *</label>
                   <input
                     type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
                     placeholder="your.email@example.com"
                     required
                     style={{
@@ -87,6 +169,9 @@ const ContactPage = () => {
                   <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Phone Number</label>
                   <input
                     type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
                     placeholder="+91 98765 43210"
                     style={{
                       width: '100%',
@@ -102,17 +187,22 @@ const ContactPage = () => {
                 </div>
                 <div>
                   <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Subject *</label>
-                  <select style={{
-                    width: '100%',
-                    padding: '14px',
-                    border: '1px solid #D1D5DB',
-                    borderRadius: '8px',
-                    fontSize: '15px',
-                    color: '#374151',
-                    transition: 'border-color 0.3s'
-                  }}
-                  onFocus={(e) => e.target.style.borderColor = '#8B6914'}
-                  onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
+                  <select 
+                    name="subject"
+                    value={formData.subject}
+                    onChange={handleInputChange}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '14px',
+                      border: '1px solid #D1D5DB',
+                      borderRadius: '8px',
+                      fontSize: '15px',
+                      color: '#374151',
+                      transition: 'border-color 0.3s'
+                    }}
+                    onFocus={(e) => e.target.style.borderColor = '#8B6914'}
+                    onBlur={(e) => e.target.style.borderColor = '#D1D5DB'}
                   >
                     <option value="">Select a subject</option>
                     <option value="general">General Inquiry</option>
@@ -126,6 +216,9 @@ const ContactPage = () => {
                 <div>
                   <label style={{ display: 'block', fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '8px' }}>Message *</label>
                   <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
                     placeholder="Tell us more about your inquiry..."
                     rows={5}
                     required
@@ -144,22 +237,24 @@ const ContactPage = () => {
                 </div>
                 <button
                   type="submit"
+                  disabled={isSubmitting}
                   style={{
-                    backgroundColor: '#8B6914',
+                    backgroundColor: isSubmitting ? '#9CA3AF' : '#8B6914',
                     color: 'white',
                     padding: '16px 32px',
                     border: 'none',
                     borderRadius: '8px',
                     fontSize: '16px',
                     fontWeight: '600',
-                    cursor: 'pointer',
+                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
                     transition: 'all 0.3s',
-                    boxShadow: '0 4px 12px rgba(139, 105, 20, 0.3)'
+                    boxShadow: '0 4px 12px rgba(139, 105, 20, 0.3)',
+                    opacity: isSubmitting ? 0.7 : 1
                   }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#6B4F0F'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#8B6914'}
+                  onMouseOver={(e) => !isSubmitting && (e.target.style.backgroundColor = '#6B4F0F')}
+                  onMouseOut={(e) => !isSubmitting && (e.target.style.backgroundColor = '#8B6914')}
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </form>
             </div>

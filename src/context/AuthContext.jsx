@@ -144,6 +144,7 @@ export const AuthProvider = ({ children }) => {
     clearError,
     isAuthenticated: state.isAuthenticated,
     user: state.user,
+    isAdmin: state.isAdmin,
     loading: state.loading,
     error: state.error
   };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Search, User, X } from 'lucide-react';
+import { ShoppingCart, Search, User, X, Settings } from 'lucide-react';
 import logo from '../assets/images/logo/logo.jpeg';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -18,7 +18,7 @@ const Header = () => {
   const cartItemsCount = getTotalItems();
   
   // Use auth context
-  const { isAuthenticated, user, logout } = useAuth();
+  const { isAuthenticated, user, logout, isAdmin } = useAuth();
 
   // Search functionality
   const handleSearchChange = (e) => {
@@ -157,6 +157,12 @@ const Header = () => {
                 <div className="user-menu-dropdown">
                   {isAuthenticated ? (
                     <>
+                      {isAdmin && (
+                        <Link to="/admin" className="user-menu-item admin-panel">
+                          <Settings style={{ width: '16px', height: '16px', marginRight: '8px' }} />
+                          Admin Panel
+                        </Link>
+                      )}
                       <Link to="/profile" className="user-menu-item">
                         My Profile
                       </Link>

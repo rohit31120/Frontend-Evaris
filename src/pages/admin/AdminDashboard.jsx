@@ -1,6 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, Users, ShoppingCart, TrendingUp, Plus, Edit, Trash2, LogOut, Eye } from 'lucide-react';
+import { Package, Users, ShoppingCart, TrendingUp, Plus, Edit, Trash2, LogOut, Eye, Check } from 'lucide-react';
+import { productsAPI } from '../../services/api';
+import { products as staticProducts } from '../../data/products';
+import p1 from '../../assets/images/products/p-1.jpeg';
+import p2 from '../../assets/images/products/p-2.jpeg';
+import p3 from '../../assets/images/products/p-3.jpeg';
+import p4 from '../../assets/images/products/p-4.jpeg';
+import p5 from '../../assets/images/products/p-5.jpeg';
+import p6 from '../../assets/images/products/p-6.jpeg';
+import p7 from '../../assets/images/products/p-7.jpeg';
+import p8 from '../../assets/images/products/p-8.jpeg';
+import p9 from '../../assets/images/products/p-9.jpeg';
+import p10 from '../../assets/images/products/p-10.jpeg';
 import '../../styles/pages/AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -11,6 +23,74 @@ const AdminDashboard = () => {
     totalUsers: 0,
     totalRevenue: 0
   });
+
+  // Function to map database products to proper image paths
+  const mapProductImages = (dbProducts) => {
+    return dbProducts.map(product => {
+      // If product has an uploaded image (starts with /uploads/), use it directly
+      if (product.image && product.image.startsWith('/uploads/')) {
+        return {
+          ...product,
+          image: `http://localhost:5000${product.image}`
+        };
+      }
+      
+      // If product has a valid image path that's not the default, try to use it
+      if (product.image && !product.image.includes('default.jpg')) {
+        return {
+          ...product,
+          image: product.image
+        };
+      }
+      
+      // Create name mapping for better matching
+      const nameMap = {
+        'EVARIS SKIN LIGHTENING CREAM': 'EVARIS SKIN LIGHTENING CREAM',
+        'EVARIS FACE WASH': 'EVARIS KLASHH FACEWASH',
+        'EVARIS MOISTURIZER': 'EVARIS BARRIER REPAIR MOISTURIZER',
+        'EVARIS SERUM': 'EVARIS VITAMIN C SERUM',
+        'EVARIS SUNSCREEN': 'EVARIS SUNSCREEN GEL',
+        'EVARIS NIGHT CREAM': 'EVARIS NIGHT REPAIR CREAM',
+        'EVARIS EYE CREAM': 'EVARIS EYE LIFT CREAM',
+        'EVARIS LIP BALM': 'EVARIS LIP CARE BALM',
+        'EVARIS BODY LOTION': 'EVARIS BODY LOTION',
+        'EVARIS HAIR OIL': 'EVARIS HAIR OIL'
+      };
+      
+      const mappedName = nameMap[product.name] || product.name;
+      
+      // Find matching static product by mapped name
+      const staticProduct = staticProducts.find(sp => 
+        sp.name.toLowerCase() === mappedName.toLowerCase()
+      );
+      
+      if (staticProduct) {
+        return {
+          ...product,
+          image: staticProduct.image
+        };
+      }
+      
+      // Final fallback - use appropriate image based on product type
+      const imageMap = {
+        'EVARIS SKIN LIGHTENING CREAM': p1,
+        'EVARIS FACE WASH': p3,
+        'EVARIS MOISTURIZER': p2,
+        'EVARIS SERUM': p4,
+        'EVARIS SUNSCREEN': p5,
+        'EVARIS NIGHT CREAM': p6,
+        'EVARIS EYE CREAM': p7,
+        'EVARIS LIP BALM': p8,
+        'EVARIS BODY LOTION': p9,
+        'EVARIS HAIR OIL': p10
+      };
+      
+      return {
+        ...product,
+        image: imageMap[product.name] || staticProducts[0]?.image || p1
+      };
+    });
+  };
   const [recentProducts, setRecentProducts] = useState([]);
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,20 +106,36 @@ const AdminDashboard = () => {
     // Fetch admin stats and recent data
     const fetchAdminData = async () => {
       try {
-        // Mock data for now - will be replaced with API calls
-        setStats({
-          totalProducts: 12,
-          totalOrders: 156,
-          totalUsers: 89,
-          totalRevenue: 45678
-        });
+        // Fetch real products from database
+        const { productsAPI } = await import("../../services/api");
+        const productsResponse = await productsAPI.getAll({ limit: 5 });
         
-        setRecentProducts([
-          { id: 1, name: 'EVARIS SKIN LIGHTENING CREAM', price: 2999, category: 'skincare', stock: 45, status: 'active' },
-          { id: 2, name: 'EVARIS BARRIER REPAIR MOISTURIZER', price: 2499, category: 'skincare', stock: 32, status: 'active' },
-          { id: 3, name: 'EVARIS VITAMIN C SERUM', price: 3499, category: 'serum', stock: 28, status: 'active' }
-        ]);
+        if (productsResponse.success) {
+          const products = productsResponse.data;
+          const mappedProducts = mapProductImages(products);
+          setRecentProducts(mappedProducts.map(product => ({
+            id: product.id,
+            name: product.name,
+            price: product.price,
+            category: product.category,
+            stock: product.stock,
+            status: product.is_active ? 'active' : 'inactive',
+            image: product.image
+          })));
+        }
 
+        // Calculate stats from real data
+        const allProductsResponse = await productsAPI.getAll();
+        const totalProducts = allProductsResponse.success ? allProductsResponse.data.length : 0;
+        
+        setStats({
+          totalProducts,
+          totalOrders: 156, // Mock data for now
+          totalUsers: 89, // Mock data for now
+          totalRevenue: 45678 // Mock data for now
+        });
+
+        // Mock orders for now
         setRecentOrders([
           { id: 1, customer: 'John Doe', total: 5998, status: 'delivered', date: '2024-01-15' },
           { id: 2, customer: 'Jane Smith', total: 3499, status: 'processing', date: '2024-01-16' },
@@ -47,6 +143,12 @@ const AdminDashboard = () => {
         ]);
       } catch (error) {
         console.error('Error fetching admin data:', error);
+        // Fallback to mock data if API fails - use imported image files
+        setRecentProducts([
+          { id: 1, name: 'EVARIS SKIN LIGHTENING CREAM', price: 2999, category: 'skincare', stock: 45, status: 'active', image: p1 },
+          { id: 2, name: 'EVARIS BARRIER REPAIR MOISTURIZER', price: 2499, category: 'skincare', stock: 32, status: 'active', image: p2 },
+          { id: 3, name: 'EVARIS VITAMIN C SERUM', price: 3499, category: 'serum', stock: 28, status: 'active', image: p4 }
+        ]);
       } finally {
         setLoading(false);
       }
@@ -59,6 +161,63 @@ const AdminDashboard = () => {
     localStorage.removeItem('authToken');
     localStorage.removeItem('user');
     navigate('/login');
+  };
+
+  const handleEditProduct = (productId) => {
+    // Navigate to edit product page (to be implemented)
+    console.log('Edit product:', productId);
+    alert('Edit product functionality will be implemented soon!');
+  };
+
+  const handleDeleteProduct = async (productId) => {
+    if (window.confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+      try {
+        console.log('Deleting product:', productId);
+        
+        // Check if user is authenticated
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+          throw new Error('You must be logged in to delete products');
+        }
+        
+        const response = await productsAPI.delete(productId);
+        
+        if (response.success) {
+          alert('Product deleted successfully!');
+          // Refresh the products list by calling the fetch function
+          const { productsAPI } = await import('../../services/api');
+          const productsResponse = await productsAPI.getAll({ limit: 5 });
+          
+          if (productsResponse.success) {
+            const products = productsResponse.data;
+            setRecentProducts(products.map(product => ({
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              category: product.category,
+              stock: product.stock,
+              status: product.is_active ? 'active' : 'inactive'
+            })));
+            
+            // Update stats
+            const allProductsResponse = await productsAPI.getAll();
+            const totalProducts = allProductsResponse.success ? allProductsResponse.data.length : 0;
+            setStats(prev => ({ ...prev, totalProducts }));
+          }
+        } else {
+          throw new Error(response.message || 'Failed to delete product');
+        }
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        alert('Failed to delete product: ' + error.message);
+      }
+    }
+  };
+
+  const handleViewOrder = (orderId) => {
+    // Navigate to order details page (to be implemented)
+    console.log('View order:', orderId);
+    alert('Order details functionality will be implemented soon!');
   };
 
   if (loading) {
@@ -159,6 +318,15 @@ const AdminDashboard = () => {
               <div className="recent-products">
                 {recentProducts.map(product => (
                   <div key={product.id} className="recent-product-card">
+                    <div className="product-image">
+                      <img 
+                        src={product.image || p1} 
+                        alt={product.name}
+                        onError={(e) => {
+                          e.target.src = p1;
+                        }}
+                      />
+                    </div>
                     <div className="product-info">
                       <h4>{product.name}</h4>
                       <p>Rs. {product.price.toLocaleString()}</p>
@@ -167,10 +335,16 @@ const AdminDashboard = () => {
                       <p className="stock-info">Stock: {product.stock}</p>
                     </div>
                     <div className="product-actions">
-                      <button className="action-btn edit">
+                      <button 
+                        className="action-btn edit"
+                        onClick={() => handleEditProduct(product.id)}
+                      >
                         <Edit size={16} />
                       </button>
-                      <button className="action-btn delete">
+                      <button 
+                        className="action-btn delete"
+                        onClick={() => handleDeleteProduct(product.id)}
+                      >
                         <Trash2 size={16} />
                       </button>
                     </div>
@@ -196,7 +370,10 @@ const AdminDashboard = () => {
                       <span className={`status-badge ${order.status}`}>{order.status}</span>
                     </div>
                     <div className="order-actions">
-                      <button className="action-btn view">
+                      <button 
+                        className="action-btn view"
+                        onClick={() => handleViewOrder(order.id)}
+                      >
                         <Eye size={16} />
                       </button>
                     </div>
@@ -222,6 +399,10 @@ const AdminDashboard = () => {
                 <Link to="/admin/users" className="quick-action-btn secondary">
                   <Users size={20} />
                   Manage Users
+                </Link>
+                <Link to="/admin/test" className="quick-action-btn test">
+                  <Check size={20} />
+                  Test All Options
                 </Link>
               </div>
             </section>

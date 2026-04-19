@@ -1,6 +1,15 @@
-/* Responsive Design for EVARIS Website */
+/* Enhanced Responsive Design for EVARIS Website */
 
-/* Mobile First Approach */
+/* Mobile First Approach with Modern Breakpoints */
+
+/* Base responsive variables */
+:root {
+  --mobile-max: 767px;
+  --tablet-max: 1023px;
+  --desktop-min: 1024px;
+  --mobile-large: 480px;
+  --mobile-small: 320px;
+}
 
 /* Header Navigation */
 @media (min-width: 768px) {
@@ -31,19 +40,18 @@
   }
 }
 
-/* Hero Section */
-@media (min-width: 768px) {
+/* Enhanced Hero Section */
+@media (min-width: 1024px) {
   .hero-grid {
     grid-template-columns: 1fr 1fr !important;
+    gap: 60px !important;
   }
-  
-  .hero-content {
-    order: 1 !important;
-    text-align: left !important;
-  }
-  
-  .hero-image {
-    order: 2 !important;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-grid {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 40px !important;
   }
 }
 
@@ -56,6 +64,7 @@
   .hero-content {
     order: 2 !important;
     text-align: center !important;
+    padding: 0 20px !important;
   }
   
   .hero-image {
@@ -63,11 +72,18 @@
   }
 }
 
-/* Trust Indicators */
-@media (min-width: 768px) {
+/* Enhanced Trust Indicators */
+@media (min-width: 1024px) {
   .trust-grid {
     grid-template-columns: repeat(4, 1fr) !important;
     gap: 40px !important;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .trust-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 30px !important;
   }
 }
 
@@ -85,27 +101,53 @@
   }
 }
 
-/* Product Cards */
-@media (max-width: 480px) {
-  .product-card {
-    padding: 20px !important;
-  }
-  
-  .product-title {
-    font-size: 18px !important;
-  }
-  
-  .product-description {
-    font-size: 13px !important;
-  }
-  
-  .product-price {
-    font-size: 24px !important;
+/* Enhanced Product Cards */
+@media (min-width: 1024px) {
+  .product-grid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 30px !important;
   }
 }
 
-/* Footer */
-@media (min-width: 768px) {
+@media (min-width: 768px) and (max-width: 1023px) {
+  .product-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 25px !important;
+  }
+}
+
+@media (max-width: 767px) {
+  .product-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px !important;
+  }
+  
+  .product-card {
+    padding: 15px !important;
+  }
+  
+  .product-title {
+    font-size: 16px !important;
+  }
+  
+  .product-description {
+    font-size: 14px !important;
+  }
+  
+  .product-price {
+    font-size: 20px !important;
+  }
+}
+
+/* Enhanced Footer */
+@media (min-width: 1024px) {
   .footer-brand {
     justify-content: flex-start !important;
   }
@@ -117,9 +159,19 @@
   .social-links {
     justify-content: flex-start !important;
   }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .footer-brand {
+    justify-content: center !important;
+  }
   
-  .newsletter-form {
-    flex-direction: row !important;
+  .footer-section {
+    text-align: center !important;
+  }
+  
+  .social-links {
+    justify-content: center !important;
   }
 }
 
@@ -142,10 +194,37 @@
   }
 }
 
+/* Enhanced Responsive Utilities */
+/* Mobile-first navigation */
+@media (max-width: 767px) {
+  .hide-on-mobile {
+    display: none !important;
+  }
+  
+  .show-on-mobile {
+    display: block !important;
+  }
+  
+  .mobile-full-width {
+    width: 100% !important;
+  }
+}
+
+/* Tablet styles */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hide-on-tablet {
+    display: none !important;
+  }
+  
+  .show-on-tablet {
+    display: block !important;
+  }
+}
+
 /* General Responsive Adjustments */
 @media (max-width: 767px) {
   .section-padding {
-    padding: 60px 20px !important;
+    padding: 40px 15px !important;
   }
   
   .container {
@@ -155,28 +234,39 @@
   .btn {
     padding: 12px 20px !important;
     font-size: 14px !important;
+    min-height: 44px;
   }
   
   .heading-large {
-    font-size: clamp(28px, 6vw, 42px) !important;
+    font-size: clamp(24px, 6vw, 32px) !important;
   }
   
   .heading-medium {
     font-size: clamp(24px, 5vw, 32px) !important;
   }
-}
-
-@media (max-width: 480px) {
-  .section-padding {
-    padding: 40px 15px !important;
-  }
-  
-  .heading-large {
-    font-size: clamp(24px, 5vw, 32px) !important;
-  }
   
   .text-body {
     font-size: 14px !important;
+  }
+  
+  .text-small {
+    font-size: 14px !important;
+  }
+  
+  .text-tiny {
+    font-size: 12px !important;
+  }
+}
+
+/* Small mobile enhancements */
+@media (max-width: 480px) {
+  .section-padding {
+    padding: 30px 10px !important;
+  }
+  
+  .btn {
+    padding: 10px 15px !important;
+    font-size: 13px !important;
   }
 }
 
